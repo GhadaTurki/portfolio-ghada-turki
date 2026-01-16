@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, Github, Filter, X } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 interface Project {
   id: number
@@ -16,152 +17,123 @@ interface Project {
   color: string
 }
 
-const projects: Project[] = [
-  {
-    id: 1,
-    title: 'Robot autonome de détection de fissures',
-    category: 'IA',
-    description:
-      'Robot intelligent utilisant l\'IA pour détecter automatiquement les fissures dans les structures',
-    problem:
-      'Détection manuelle des fissures coûteuse et sujette aux erreurs dans les inspections industrielles',
-    solution:
-      'Développement d\'un robot autonome équipé de caméras et d\'algorithmes d\'IA pour la détection automatique',
-    technologies: ['SolidWorks', 'Intelligence Artificielle', 'ESP32', 'Computer Vision'],
-    image: '/crac.jpg',
-    color: 'from-purple-500 to-pink-500',
-  },
-  {
-    id: 2,
-    title: 'Émulateur de groupe électrogène + AR',
-    category: 'AR',
-    description:
-      'Application mobile en réalité augmentée pour explorer virtuellement les composants d\'un groupe électrogène',
-    problem:
-      'Formation technique complexe et coûteuse pour les techniciens sur les groupes électrogènes',
-    solution:
-      'Application AR immersive avec quiz intégré permettant l\'apprentissage interactif des composants',
-    technologies: ['Unity', 'C#', 'Vuforia', 'Blender', 'SolidWorks'],
-    image: '/app.jpg',
-    color: 'from-blue-500 to-cyan-500',
-  },
-  {
-    id: 7,
-    title: 'Simulateur de pannes de groupe électrogène',
-    category: 'Automatisation',
-    description:
-      'Conception et réalisation d\'un simulateur de pannes d\'un groupe électrogène avec application mobile',
-    problem:
-      'Formation des techniciens sur les pannes de groupes électrogènes nécessite un équipement réel coûteux et complexe',
-    solution:
-      'Développement d\'un simulateur de pannes avec contrôleur Guardrevolution et application mobile Java pour l\'apprentissage',
-    technologies: ['Java', 'Électronique industrielle', 'Contrôleurs', 'SolidWorks'],
-    image: '/groupe.jpg',
-    color: 'from-yellow-500 to-orange-500',
-  },
-  {
-    id: 3,
-    title: 'Système automatisé de comptage des câbles',
-    category: 'IoT',
-    description:
-      'Système automatisé de comptage des câbles en environnement industriel, intégrant une solution électronique, logicielle et mécanique',
-    problem:
-      'Le comptage manuel des câbles produits est chronophage, sujet aux erreurs humaines et peu fiable pour le suivi en temps réel de la production',
-    solution:
-      'Développement d\'un poste de comptage automatisé basé sur un capteur de proximité, une carte Arduino et une communication série pour la transmission des données',
-    technologies: ['Arduino', 'Capteur E3F-DS30C4', 'SolidWorks', 'VS Code / Arduino IDE', 'Automatisation industrielle'],
-    image: '/gd11.png',
-    color: 'from-green-500 to-emerald-500',
-  },
-  {
-    id: 8,
-    title: 'Application desktop intelligente de gestion et suivi de production',
-    category: 'IoT',
-    description:
-      'Application desktop intelligente dédiée à la gestion et au suivi de la production industrielle, permettant de remplacer un système manuel basé sur des fiches papier par une solution numérique automatisée',
-    problem:
-      'Le suivi reposait sur des fiches papier remplies manuellement, un comptage physique via des courroies numérotées et un calcul a posteriori. Ce système était chronophage, sujet aux erreurs humaines et peu adapté au suivi en temps réel',
-    solution:
-      'Développement d\'une application desktop complète intégrant la gestion des ouvriers, le suivi des shifts, la collecte et l\'analyse des données, avec reconnaissance faciale et QR codes',
-    technologies: ['Python', 'VS Code', 'QR Code', 'Reconnaissance faciale', 'CSV / Excel', 'Supervision industrielle'],
-    image: '/gd.png',
-    color: 'from-blue-500 to-indigo-500',
-  },
-  {
-    id: 9,
-    title: 'Application mobile d\'interprétation des codes d\'erreur d\'un groupe électrogène',
-    category: 'Automatisation',
-    description:
-      'Application mobile simple permettant aux techniciens de saisir un code d\'erreur affiché sur le contrôleur Guard Revolution AMF25 et d\'afficher instantanément la description détaillée du défaut',
-    problem:
-      'Les codes d\'erreur affichés sur le contrôleur sont techniques et peu explicites, difficiles à interpréter sans documentation, source de perte de temps pour les techniciens lors des interventions',
-    solution:
-      'Développement d\'une application mobile légère et intuitive permettant la saisie manuelle du code d\'erreur et l\'affichage instantané de sa signification détaillée',
-    technologies: ['Application mobile', 'Maintenance industrielle', 'Groupes électrogènes'],
-    image: '/cappp.jpg',
-    color: 'from-purple-500 to-pink-500',
-  },
-  {
-    id: 4,
-    title: 'Suiveur de ligne & détecteur d\'obstacles',
-    category: 'Robotique',
-    description:
-      'Robot autonome capable de suivre une ligne et d\'éviter les obstacles de manière intelligente',
-    problem:
-      'Besoin de robots autonomes pour la navigation dans des environnements structurés',
-    solution:
-      'Développement d\'un robot avec algorithmes de suivi de ligne et détection d\'obstacles',
-    technologies: ['Arduino', 'SolidWorks', 'Capteurs', 'Algorithmes'],
-    image: '/api/placeholder/600/400',
-    color: 'from-orange-500 to-red-500',
-  },
-  {
-    id: 5,
-    title: 'Bras robotique dessinant sur bois (Woodcraft)',
-    category: 'Robotique',
-    description:
-      'Commande précise d\'un bras robotique pour réaliser des motifs complexes sur le bois',
-    problem:
-      'Réalisation manuelle de motifs complexes sur bois longue et imprécise',
-    solution:
-      'Programmation d\'un bras robotique avec trajectoires précises pour l\'usinage artistique',
-    technologies: ['SolidWorks', 'RT Tool Box', 'Robotique industrielle', 'Teaching method'],
-    image: '/rttoolbox.png',
-    color: 'from-indigo-500 to-blue-500',
-  },
-  {
-    id: 6,
-    title: 'Réservoir intelligent avec Node-RED',
-    category: 'IoT',
-    description:
-      'Système de monitoring intelligent d\'un réservoir avec dashboard temps réel et alertes',
-    problem:
-      'Surveillance manuelle des réservoirs inefficace et risque de débordement ou de pénurie',
-    solution:
-      'Dashboard Node-RED avec MQTT et ESP32 pour le monitoring en temps réel et alertes automatiques',
-    technologies: ['Node-RED', 'MQTT', 'ESP32', 'IoT', 'Dashboard'],
-    image: '/api/placeholder/600/400',
-    color: 'from-teal-500 to-cyan-500',
-  },
-  {
-    id: 10,
-    title: 'Application de supervision industrielle & indicateurs de maintenance',
-    category: 'Automatisation',
-    description:
-      'Application de supervision industrielle permettant l\'acquisition, l\'enregistrement et l\'analyse des arrêts machine, données de production et paramètres process, avec calcul automatique des indicateurs de maintenance MTTR et MTBF',
-    problem:
-      'Dans un environnement industriel, l\'absence d\'un système de supervision structuré entraîne une mauvaise traçabilité des arrêts machine, un suivi limité de la production et de la consommation matière, et une difficulté à analyser les performances et la maintenance',
-    solution:
-      'Développement d\'une application de supervision centralisée intégrant l\'acquisition des signaux d\'arrêt via une carte d\'acquisition, l\'enregistrement des données process dans une base de données, et une interface graphique multi-fenêtres pour le suivi, l\'analyse et la prise de décision',
-    technologies: ['WinDev', 'Base de données', 'Carte d\'acquisition', 'Supervision industrielle', 'Maintenance industrielle', 'MTTR / MTBF', 'Siemens'],
-    image: '/mes1.png',
-    color: 'from-indigo-500 to-purple-500',
-  },
-]
-
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [playingVideo, setPlayingVideo] = useState<string | null>(null)
+  const { t } = useLanguage()
+  
+  const projects: Project[] = [
+    {
+      id: 1,
+      title: t('projects.project1.title'),
+      category: 'IA',
+      description: t('projects.project1.description'),
+      problem: t('projects.project1.problem'),
+      solution: t('projects.project1.solution'),
+      technologies: ['SolidWorks', 'Intelligence Artificielle', 'ESP32', 'Computer Vision'],
+      image: '/crac.jpg',
+      color: 'from-purple-500 to-pink-500',
+    },
+    {
+      id: 2,
+      title: t('projects.project2.title'),
+      category: 'AR',
+      description: t('projects.project2.description'),
+      problem: t('projects.project2.problem'),
+      solution: t('projects.project2.solution'),
+      technologies: ['Unity', 'C#', 'Vuforia', 'Blender', 'SolidWorks'],
+      image: '/app.jpg',
+      color: 'from-blue-500 to-cyan-500',
+    },
+    {
+      id: 7,
+      title: t('projects.project7.title'),
+      category: 'Automatisation',
+      description: t('projects.project7.description'),
+      problem: t('projects.project7.problem'),
+      solution: t('projects.project7.solution'),
+      technologies: ['Java', 'Électronique industrielle', 'Contrôleurs', 'SolidWorks'],
+      image: '/groupe.jpg',
+      color: 'from-yellow-500 to-orange-500',
+    },
+    {
+      id: 3,
+      title: t('projects.project3.title'),
+      category: 'IoT',
+      description: t('projects.project3.description'),
+      problem: t('projects.project3.problem'),
+      solution: t('projects.project3.solution'),
+      technologies: ['Arduino', 'Capteur E3F-DS30C4', 'SolidWorks', 'VS Code / Arduino IDE', 'Automatisation industrielle'],
+      image: '/gd11.png',
+      color: 'from-green-500 to-emerald-500',
+    },
+    {
+      id: 8,
+      title: t('projects.project8.title'),
+      category: 'IoT',
+      description: t('projects.project8.description'),
+      problem: t('projects.project8.problem'),
+      solution: t('projects.project8.solution'),
+      technologies: ['Python', 'VS Code', 'QR Code', 'Reconnaissance faciale', 'CSV / Excel', 'Supervision industrielle'],
+      image: '/gd.png',
+      color: 'from-blue-500 to-indigo-500',
+    },
+    {
+      id: 9,
+      title: t('projects.project9.title'),
+      category: 'Automatisation',
+      description: t('projects.project9.description'),
+      problem: t('projects.project9.problem'),
+      solution: t('projects.project9.solution'),
+      technologies: ['Application mobile', 'Maintenance industrielle', 'Groupes électrogènes'],
+      image: '/cappp.jpg',
+      color: 'from-purple-500 to-pink-500',
+    },
+    {
+      id: 4,
+      title: t('projects.project4.title'),
+      category: 'Robotique',
+      description: t('projects.project4.description'),
+      problem: t('projects.project4.problem'),
+      solution: t('projects.project4.solution'),
+      technologies: ['Arduino', 'SolidWorks', 'Capteurs', 'Algorithmes'],
+      image: '/api/placeholder/600/400',
+      color: 'from-orange-500 to-red-500',
+    },
+    {
+      id: 5,
+      title: t('projects.project5.title'),
+      category: 'Robotique',
+      description: t('projects.project5.description'),
+      problem: t('projects.project5.problem'),
+      solution: t('projects.project5.solution'),
+      technologies: ['SolidWorks', 'RT Tool Box', 'Robotique industrielle', 'Teaching method'],
+      image: '/rttoolbox.png',
+      color: 'from-indigo-500 to-blue-500',
+    },
+    {
+      id: 6,
+      title: t('projects.project6.title'),
+      category: 'IoT',
+      description: t('projects.project6.description'),
+      problem: t('projects.project6.problem'),
+      solution: t('projects.project6.solution'),
+      technologies: ['Node-RED', 'MQTT', 'ESP32', 'IoT', 'Dashboard'],
+      image: '/api/placeholder/600/400',
+      color: 'from-teal-500 to-cyan-500',
+    },
+    {
+      id: 10,
+      title: t('projects.project10.title'),
+      category: 'Automatisation',
+      description: t('projects.project10.description'),
+      problem: t('projects.project10.problem'),
+      solution: t('projects.project10.solution'),
+      technologies: ['WinDev', 'Base de données', 'Carte d\'acquisition', 'Supervision industrielle', 'Maintenance industrielle', 'MTTR / MTBF', 'Proteus 8'],
+      image: '/mes1.png',
+      color: 'from-indigo-500 to-purple-500',
+    },
+  ]
 
   return (
     <section id="projects" className="section-padding bg-gray-50 dark:bg-industrial-dark">
@@ -173,11 +145,11 @@ export default function Projects() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">Projets</span>
+            <span className="text-gradient">{t('projects.title')}</span>
           </h2>
           <div className="w-24 h-1 bg-primary-600 dark:bg-industrial-accent mx-auto mb-8" />
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Découvrez mes réalisations en ingénierie, de la robotique à l'intelligence artificielle
+            {t('projects.subtitle')}
           </p>
         </motion.div>
 
@@ -257,7 +229,7 @@ export default function Projects() {
                         onClick={() => setSelectedProject(project)}
                         className="flex-1 px-4 py-2 bg-primary-600 dark:bg-industrial-accent text-white rounded-lg hover:bg-primary-700 dark:hover:bg-industrial-accent/90 transition-colors text-sm font-medium"
                       >
-                        Voir détails
+                        {t('projects.viewDetails')}
                       </button>
                     </div>
                   </div>
@@ -312,86 +284,74 @@ export default function Projects() {
                     </div>
                     <div className="mb-6 p-4 rounded-lg bg-primary-50 dark:bg-industrial-light/30 border border-primary-200 dark:border-industrial-light">
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                        Objectif du Projet
+                        {t('projects.project5.objective')}
                       </h3>
                       <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                        Le but de notre projet est de créer un <strong>woodcraft</strong>, où un robot sera capable 
-                        d'écrire un mot ou de dessiner sur du bois de manière artisanale. Dans notre cas, le robot 
-                        sera chargé d'écrire le mot <strong>"meca"</strong> sur une surface en bois.
+                        {t('projects.project5.objectiveDesc')}
                       </p>
                     </div>
                     <div className="mb-6 space-y-4">
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                           <span className="w-8 h-8 rounded-full bg-primary-600 dark:bg-industrial-accent text-white flex items-center justify-center text-sm font-bold">1</span>
-                          Conception sur SolidWorks
+                          {t('projects.project5.step1')}
                         </h4>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                          La première étape consiste à concevoir la table de travail, l'emplacement du robot et la pièce 
-                          sur laquelle il écrira le mot "meca". Cette conception détaillée a été réalisée à l'aide du 
-                          logiciel <strong>SolidWorks</strong>.
+                          {t('projects.project5.step1Desc')}
                         </p>
                       </div>
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                           <span className="w-8 h-8 rounded-full bg-primary-600 dark:bg-industrial-accent text-white flex items-center justify-center text-sm font-bold">2</span>
-                          Programmation avec RT Tool Box - Création du Hand
+                          {t('projects.project5.step2')}
                         </h4>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                          Nous avons utilisé le logiciel <strong>RT Tool Box</strong> pour programmer le robot. Dans un premier temps, 
-                          nous avons créé notre hand, définissant ainsi la configuration des outils et des effecteurs que 
-                          le robot utilisera pour l'écriture sur bois.
+                          {t('projects.project5.step2Desc')}
                         </p>
                       </div>
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                           <span className="w-8 h-8 rounded-full bg-primary-600 dark:bg-industrial-accent text-white flex items-center justify-center text-sm font-bold">3</span>
-                          Intégration des Pièces à RT Tool Box
+                          {t('projects.project5.step3')}
                         </h4>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                          Suite à la création du hand, nous avons intégré les pièces conçues précédemment sur 
-                          SolidWorks dans le logiciel RT Tool Box. Cette étape garantit la <strong>synchronisation entre les 
-                          éléments mécaniques et la programmation</strong>, assurant une exécution cohérente des mouvements 
-                          du robot.
+                          {t('projects.project5.step3Desc')}
                         </p>
                       </div>
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                           <span className="w-8 h-8 rounded-full bg-primary-600 dark:bg-industrial-accent text-white flex items-center justify-center text-sm font-bold">4</span>
-                          Programmation Avancée avec la Méthode de Teaching de Robot
+                          {t('projects.project5.step4')}
                         </h4>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                          Enfin, par le biais de la <strong>méthode de teaching de robot</strong>, nous avons affiné la programmation du 
-                          robot. Cette approche interactive a permis au robot d'apprendre et de s'adapter 
-                          dynamiquement à la surface du bois, améliorant ainsi sa capacité à écrire le mot "meca" avec 
-                          <strong>précision et efficacité</strong>.
+                          {t('projects.project5.step4Desc')}
                         </p>
                       </div>
                     </div>
                     <div className="mb-6 p-4 rounded-lg bg-gradient-to-r from-primary-100 to-primary-50 dark:from-industrial-light/50 dark:to-industrial-light/30 border border-primary-200 dark:border-industrial-light">
                       <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
-                        Points forts du projet
+                        {t('projects.project5.highlights')}
                       </h4>
                       <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                         <li className="flex items-start gap-2">
                           <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                          <span><strong>Intégration complète</strong> : De la conception 3D (SolidWorks) à la programmation robotique (RT Tool Box)</span>
+                          <span>{t('projects.project5.highlight1')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                          <span><strong>Précision artisanale</strong> : Réalisation de motifs complexes avec une grande précision</span>
+                          <span>{t('projects.project5.highlight2')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                          <span><strong>Méthode de teaching</strong> : Adaptation dynamique du robot à la surface du bois</span>
+                          <span>{t('projects.project5.highlight3')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                          <span><strong>Automatisation</strong> : Réduction du temps de production et amélioration de la reproductibilité</span>
+                          <span>{t('projects.project5.highlight4')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                          <span><strong>Application industrielle</strong> : Solution applicable à la personnalisation de produits en bois</span>
+                          <span>{t('projects.project5.highlight5')}</span>
                         </li>
                       </ul>
                     </div>
@@ -413,12 +373,7 @@ export default function Projects() {
                 {selectedProject.id === 1 && (
                   <div className="mb-6 p-4 rounded-lg bg-primary-50 dark:bg-industrial-light/30 border border-primary-200 dark:border-industrial-light">
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                      <strong>Robot de détection des fissures</strong> réalisé par <strong>VGG16</strong>, 
-                      qui est un modèle de réseau de neurones convolutifs profond (CNN) spécialisé dans 
-                      la classification d'images. Le système utilise une <strong>carte ESP32</strong> pour 
-                      le contrôle du robot et le traitement en temps réel des images capturées par la caméra. 
-                      Le modèle VGG16, pré-entraîné sur ImageNet, a été fine-tuné pour détecter et classifier 
-                      les fissures dans les structures, permettant une inspection automatisée et précise.
+                      {t('projects.project1.detail')}
                     </p>
                   </div>
                 )}
@@ -453,100 +408,98 @@ export default function Projects() {
                     </div>
                     <div className="mb-6 p-4 rounded-lg bg-primary-50 dark:bg-industrial-light/30 border border-primary-200 dark:border-industrial-light">
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                        Description
+                        {t('projects.description')}
                       </h3>
                       <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        Système automatisé de comptage des câbles en environnement industriel, intégrant une solution 
-                        électronique, logicielle et mécanique pour améliorer la supervision de la production et la 
-                        fiabilité des données de fabrication.
+                        {t('projects.project3.detail')}
                       </p>
                     </div>
                     <div className="mb-6 space-y-4">
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          Fonctionnalités principales
+                          {t('projects.project3.features')}
                         </h4>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Détection automatique du passage des câbles</span>
+                            <span>{t('projects.project3.feature1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Comptage fiable et précis en temps réel</span>
+                            <span>{t('projects.project3.feature2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Transmission des données vers une application de supervision</span>
+                            <span>{t('projects.project3.feature3')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Intégration facile dans une ligne de production existante</span>
+                            <span>{t('projects.project3.feature4')}</span>
                           </li>
                         </ul>
                       </div>
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          Conception électronique
+                          {t('projects.project3.electronic')}
                         </h4>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Remplacement de la carte initiale par une <strong>carte Arduino</strong></span>
+                            <span>{t('projects.project3.electronic1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Intégration d'un <strong>capteur de proximité E3F-DS30C4</strong></span>
+                            <span>{t('projects.project3.electronic2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Réalisation du schéma de câblage complet</span>
+                            <span>{t('projects.project3.electronic3')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Tests de fiabilité en conditions industrielles</span>
+                            <span>{t('projects.project3.electronic4')}</span>
                           </li>
                         </ul>
                       </div>
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          Programmation
+                          {t('projects.project3.programming')}
                         </h4>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Programmation sous <strong>Arduino IDE</strong></span>
+                            <span>{t('projects.project3.programming1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Implémentation d'un <strong>algorithme de détection de front descendant</strong> pour garantir un comptage précis et éviter les doublons</span>
+                            <span>{t('projects.project3.programming2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Incrémentation automatique du compteur</span>
+                            <span>{t('projects.project3.programming3')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Communication série pour l'affichage et l'exploitation des données</span>
+                            <span>{t('projects.project3.programming4')}</span>
                           </li>
                         </ul>
                       </div>
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          Conception mécanique & Réalisation
+                          {t('projects.project3.mechanical')}
                         </h4>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Conception complète du poste de travail sous <strong>SolidWorks</strong></span>
+                            <span>{t('projects.project3.mechanical1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Montage complet du système (Arduino + capteur + structure mécanique)</span>
+                            <span>{t('projects.project3.mechanical2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Validation du bon fonctionnement du comptage automatique</span>
+                            <span>{t('projects.project3.mechanical3')}</span>
                           </li>
                         </ul>
                       </div>
@@ -962,12 +915,10 @@ export default function Projects() {
 
                     <div className="mb-6 p-4 rounded-lg bg-primary-50 dark:bg-industrial-light/30 border border-primary-200 dark:border-industrial-light">
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                        Description
+                        {t('projects.description')}
                       </h3>
                       <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        Application de supervision industrielle permettant l'acquisition, l'enregistrement et l'analyse 
-                        des arrêts machine, données de production et paramètres process, avec calcul automatique des 
-                        indicateurs de maintenance <strong>MTTR</strong> et <strong>MTBF</strong>, développée sous <strong>WinDev</strong>.
+                        {t('projects.project10.detail')}
                       </p>
                     </div>
 
@@ -975,23 +926,23 @@ export default function Projects() {
                       {/* Problématique */}
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          🎯 Problématique
+                          🎯 {t('projects.project10.problematic')}
                         </h4>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-                          Dans un environnement industriel, l'absence d'un système de supervision structuré entraîne :
+                          {t('projects.project10.problematicDesc')}
                         </p>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>une <strong>mauvaise traçabilité des arrêts machine</strong></span>
+                            <span>{t('projects.project10.problematic1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>un <strong>suivi limité de la production et de la consommation matière</strong></span>
+                            <span>{t('projects.project10.problematic2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>une <strong>difficulté à analyser les performances et la maintenance</strong></span>
+                            <span>{t('projects.project10.problematic3')}</span>
                           </li>
                         </ul>
                       </div>
@@ -999,23 +950,23 @@ export default function Projects() {
                       {/* Solution */}
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          💡 Solution
+                          💡 {t('projects.project10.solutionTitle')}
                         </h4>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-                          Développement d'une application de supervision centralisée intégrant :
+                          {t('projects.project10.solutionDesc')}
                         </p>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>l'<strong>acquisition des signaux d'arrêt</strong> via une carte d'acquisition</span>
+                            <span>{t('projects.project10.solution1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>l'<strong>enregistrement des données process</strong> dans une base de données</span>
+                            <span>{t('projects.project10.solution2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>une <strong>interface graphique multi-fenêtres</strong> pour le suivi, l'analyse et la prise de décision</span>
+                            <span>{t('projects.project10.solution3')}</span>
                           </li>
                         </ul>
                       </div>
@@ -1023,64 +974,48 @@ export default function Projects() {
                       {/* Acquisition des arrêts machine */}
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          ⚙️ Acquisition des arrêts machine
+                          ⚙️ {t('projects.project10.acquisition')}
                         </h4>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300 mb-3">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span><strong>Pin 11</strong> : Arrêt défaut alimentation</span>
+                            <span>{t('projects.project10.acquisition1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span><strong>Pin 10</strong> : Arrêt défaut pression</span>
+                            <span>{t('projects.project10.acquisition2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span><strong>Pin 9</strong> : Arrêt opérateur</span>
+                            <span>{t('projects.project10.acquisition3')}</span>
                           </li>
                         </ul>
                         <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                          ➡️ Chaque arrêt est enregistré avec : <strong>type d'arrêt</strong>, <strong>date et heure</strong>, 
-                          <strong>historique consultable</strong>
+                          ➡️ {t('projects.project10.acquisitionDesc')}
                         </p>
                       </div>
 
                       {/* Interface graphique */}
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          🖥️ Interface graphique (WinDev)
+                          🖥️ {t('projects.project10.interface')}
                         </h4>
                         <div className="space-y-4">
                           <div>
-                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">Fenêtre 1 – Arrêts & Maintenance</h5>
-                            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1 ml-4">
-                              <li>• Liste des arrêts avec type, date, heure</li>
-                              <li>• Filtrage par type et par période</li>
-                              <li>• Calcul et affichage des indicateurs : <strong>MTTR</strong> (Mean Time To Repair) et <strong>MTBF</strong> (Mean Time Between Failures)</li>
-                            </ul>
+                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">{t('projects.project10.window1')}</h5>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">{t('projects.project10.window1Desc')}</p>
                           </div>
                           <div>
-                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">Fenêtre 2 – Suivi de la production</h5>
-                            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1 ml-4">
-                              <li>• Affichage de la production journalière : pièces conformes, pièces non conformes, production totale</li>
-                              <li>• Analyse rapide de la performance de production</li>
-                            </ul>
+                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">{t('projects.project10.window2')}</h5>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">{t('projects.project10.window2Desc')}</p>
                           </div>
                           <div>
-                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">Fenêtre 3 – Suivi process</h5>
-                            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1 ml-4">
-                              <li>• Suivi de la consommation de matière première en fonction du temps (par jour)</li>
-                              <li>• Historique de la température</li>
-                              <li>• Détection et enregistrement des dépassements de seuil (température &gt; 70 °C)</li>
-                              <li>• Filtrage des données par date</li>
-                            </ul>
+                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">{t('projects.project10.window3')}</h5>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">{t('projects.project10.window3Desc')}</p>
                           </div>
                           <div>
-                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">Fenêtre principale</h5>
-                            <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1 ml-4">
-                              <li>• Menu central permettant l'accès aux différentes fenêtres</li>
-                              <li>• Navigation simple et intuitive</li>
-                            </ul>
+                            <h5 className="font-semibold text-gray-900 dark:text-white mb-2">{t('projects.project10.windowMain')}</h5>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">{t('projects.project10.windowMainDesc')}</p>
                           </div>
                         </div>
                       </div>
@@ -1088,24 +1023,24 @@ export default function Projects() {
                       {/* Développement & Programmation */}
                       <div className="p-4 rounded-lg bg-white dark:bg-industrial-light border border-gray-200 dark:border-industrial-light">
                         <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                          💻 Développement & Programmation
+                          💻 {t('projects.project10.development')}
                         </h4>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Programmation de la <strong>carte d'acquisition</strong></span>
+                            <span>{t('projects.project10.dev1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Acquisition et enregistrement : des arrêts machine, des données de production, des données de température, de la consommation de matière première</span>
+                            <span>{t('projects.project10.dev2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Développement de l'interface graphique et de la base de données sous <strong>WinDev</strong></span>
+                            <span>{t('projects.project10.dev3')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">•</span>
-                            <span>Implémentation des filtres et calculs statistiques</span>
+                            <span>{t('projects.project10.dev4')}</span>
                           </li>
                         </ul>
                       </div>
@@ -1113,28 +1048,24 @@ export default function Projects() {
                       {/* Valeur ajoutée */}
                       <div className="p-4 rounded-lg bg-gradient-to-r from-primary-100 to-primary-50 dark:from-industrial-light/50 dark:to-industrial-light/30 border border-primary-200 dark:border-industrial-light">
                         <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
-                          🎯 Valeur ajoutée du projet
+                          🎯 {t('projects.project10.value')}
                         </h4>
                         <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                            <span><strong>Vision complète</strong> acquisition → supervision → analyse</span>
+                            <span>{t('projects.project10.value1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                            <span>Compétences en <strong>maintenance industrielle</strong></span>
+                            <span>{t('projects.project10.value2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                            <span>Exploitation des données pour <strong>l'aide à la décision</strong></span>
+                            <span>{t('projects.project10.value3')}</span>
                           </li>
                           <li className="flex items-start gap-2">
                             <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                            <span>Projet très apprécié en <strong>industrie & automatisation</strong></span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <span className="text-primary-600 dark:text-industrial-accent font-bold">✓</span>
-                            <span>Intégration <strong>WinDev</strong> et <strong>Siemens</strong></span>
+                            <span>{t('projects.project10.value4')}</span>
                           </li>
                         </ul>
                       </div>
@@ -1290,7 +1221,7 @@ export default function Projects() {
                 {/* Description générale */}
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    Description
+                    {t('projects.description')}
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     {selectedProject.description}
@@ -1300,7 +1231,7 @@ export default function Projects() {
                 {/* Problématique */}
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    Problématique
+                    {t('projects.problem')}
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     {selectedProject.problem}
@@ -1310,7 +1241,7 @@ export default function Projects() {
                 {/* Solution */}
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    Solution
+                    {t('projects.solution')}
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     {selectedProject.solution}
@@ -1320,7 +1251,7 @@ export default function Projects() {
                 {/* Technologies */}
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                    Technologies utilisées
+                    {t('projects.technologies')}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {selectedProject.technologies.map((tech, index) => (

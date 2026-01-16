@@ -2,9 +2,13 @@
 
 import { motion } from 'framer-motion'
 import { Download, ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import { useLanguage } from './LanguageProvider'
 
 export default function Hero() {
+  const { language, t } = useLanguage()
+  
+  // CV selon la langue
+  const cvPath = language === 'fr' ? '/CV_Ghada_Turki.pdf' : '/resume GhadaTurki.pdf'
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -106,16 +110,16 @@ export default function Hero() {
           {/* Texte sous la photo */}
           <motion.div variants={itemVariants} className="mb-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
-              Ghada Turki
+              {t('hero.name')}
             </h2>
             <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-2">
-              Étudiante ingénieure en Électromécanique – 5ᵉ année à ESPRIT
+              {t('hero.title')}
             </p>
             <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-4">
-              Titulaire d'un Master professionnel en Mécatronique
+              {t('hero.master')}
             </p>
             <p className="text-xl md:text-2xl text-primary-600 dark:text-industrial-accent font-semibold italic">
-              Je transforme les idées en prototypes… et les problèmes industriels en solutions intelligentes
+              {t('hero.tagline')}
             </p>
           </motion.div>
 
@@ -124,20 +128,33 @@ export default function Hero() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Link
-              href="#projects"
-              className="group px-8 py-4 bg-primary-600 dark:bg-industrial-accent text-white rounded-lg font-semibold flex items-center gap-2 hover:bg-primary-700 dark:hover:bg-industrial-accent/90 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              Voir mes projets
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
             <a
-              href="/CV_Ghada_Turki.pdf"
+              href="#projects"
+              onClick={(e) => {
+                e.preventDefault()
+                const element = document.querySelector('#projects')
+                if (element) {
+                  const headerOffset = 80
+                  const elementPosition = element.getBoundingClientRect().top
+                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+                  window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                  })
+                }
+              }}
+              className="group px-8 py-4 bg-primary-600 dark:bg-industrial-accent text-white rounded-lg font-semibold flex items-center gap-2 hover:bg-primary-700 dark:hover:bg-industrial-accent/90 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer"
+            >
+              {t('hero.viewProjects')}
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a
+              href={cvPath}
               download
               className="px-8 py-4 border-2 border-primary-600 dark:border-industrial-accent text-primary-600 dark:text-industrial-accent rounded-lg font-semibold flex items-center gap-2 hover:bg-primary-50 dark:hover:bg-industrial-light/10 transition-all"
             >
               <Download className="w-5 h-5" />
-              Télécharger mon CV
+              {t('hero.downloadCV')}
             </a>
           </motion.div>
         </motion.div>

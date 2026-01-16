@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { GraduationCap, Award, Calendar } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 interface EducationItem {
   degree: string
@@ -11,31 +12,32 @@ interface EducationItem {
   description?: string
 }
 
-const education: EducationItem[] = [
-  {
-    degree: 'Cycle d\'ingénieur en Électromécanique – Spécialité Mécatronique',
-    institution: 'École Supérieure Privée d\'Ingénierie et de Technologies - ESPRIT',
-    period: '2024 - Présent',
-    status: 'En cours',
-    description: 'Formation approfondie en mécatronique, automatisation et systèmes intelligents',
-  },
-  {
-    degree: 'Mastère Professionnel co-construit en Mécatronique',
-    institution: 'Institut Supérieur des Technologies de l\'Information et des Communications - ISTIC',
-    period: '2023 - 2025',
-    status: 'Diplômé',
-    description: 'Spécialisation en systèmes mécatroniques et intégration mécanique-électronique-informatique',
-  },
-  {
-    degree: 'Licence appliquée en génie mécanique',
-    institution: 'Institut supérieur des études technologiques de Nabeul - ISETN',
-    period: '2020 - 2023',
-    status: 'Diplômé',
-    description: 'Fondations en génie mécanique, conception et fabrication',
-  },
-]
-
 export default function Education() {
+  const { t } = useLanguage()
+  
+  const education: EducationItem[] = [
+    {
+      degree: t('education.esprit.degree'),
+      institution: t('education.esprit.institution'),
+      period: t('education.esprit.period'),
+      status: t('education.esprit.status'),
+      description: t('education.esprit.description'),
+    },
+    {
+      degree: t('education.istic.degree'),
+      institution: t('education.istic.institution'),
+      period: t('education.istic.period'),
+      status: t('education.istic.status'),
+      description: t('education.istic.description'),
+    },
+    {
+      degree: t('education.isetn.degree'),
+      institution: t('education.isetn.institution'),
+      period: t('education.isetn.period'),
+      status: t('education.isetn.status'),
+      description: t('education.isetn.description'),
+    },
+  ]
   return (
     <section id="education" className="section-padding bg-gray-50 dark:bg-industrial-dark">
       <div className="container-custom">
@@ -46,7 +48,7 @@ export default function Education() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">Formation</span>
+            <span className="text-gradient">{t('education.title')}</span>
           </h2>
           <div className="w-24 h-1 bg-primary-600 dark:bg-industrial-accent mx-auto mb-8" />
         </motion.div>
@@ -72,7 +74,7 @@ export default function Education() {
                     </h3>
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        item.status === 'En cours'
+                        item.status === t('education.esprit.status')
                           ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
                           : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                       }`}
@@ -108,27 +110,24 @@ export default function Education() {
           <div className="flex items-center gap-4 mb-6">
             <Award className="w-8 h-8 text-primary-600 dark:text-industrial-accent" />
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Vie associative
+              {t('education.associative')}
             </h3>
           </div>
           <div className="space-y-6 text-gray-700 dark:text-gray-300">
             <div>
               <p>
-                <strong>Membre dans l'association d'Education Relative à l'Environnement de Hammamet</strong>
-                : Participation dans plusieurs chantiers et formations.
+                <strong>{t('education.associative.member')}</strong>
+                : {t('education.associative.memberDesc')}
               </p>
             </div>
 
             {/* AIESEC */}
             <div className="p-4 rounded-lg bg-white/50 dark:bg-industrial-dark/50">
               <p className="mb-3">
-                <strong>AIESEC – Stage volontaire en Turquie, Izmit (06/2023 - 08/2023)</strong>
+                <strong>{t('education.aiesec.title')}</strong>
               </p>
               <p className="mb-4 text-sm leading-relaxed">
-                Collaboration internationale pour organiser des événements communautaires, animation
-                de sessions "Talk to Practice" en anglais et direction d'activités éducatives pour
-                enfants et adultes. Certification obtenue en Leadership Development Experience dans le cadre 
-                du projet Global Volunteer "Youth 4 Impact" visant l'Objectif de Développement Durable #4 (Éducation de qualité).
+                {t('education.aiesec.description')}
               </p>
               <motion.a
                 href="/Certification.pdf"
@@ -140,7 +139,7 @@ export default function Education() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span className="text-sm font-medium text-primary-700 dark:text-industrial-accent">
-                  Télécharger le certificat Leadership Development Experience
+                  {t('education.aiesec.download')}
                 </span>
               </motion.a>
             </div>
@@ -148,12 +147,10 @@ export default function Education() {
             {/* Bal des Projets */}
             <div className="p-4 rounded-lg bg-white/50 dark:bg-industrial-dark/50">
               <p className="mb-3">
-                <strong>Bal des Projets 2025 – ESPRIT</strong>
+                <strong>{t('education.bal.title')}</strong>
               </p>
               <p className="mb-4 text-sm leading-relaxed">
-                Dans le cadre du Bal des Projets 2025 organisé par ESPRIT, j'ai eu l'opportunité de collaborer 
-                avec une équipe de 6 personnes sur un projet de détection automatique de fissures. Cette expérience 
-                m'a permis de renforcer mes compétences en travail d'équipe et en résolution de problèmes techniques.
+                {t('education.bal.description')}
               </p>
               <motion.a
                 href="/ESE_attestation_Ghada_Turki dit Gara ali.pdf"
@@ -165,7 +162,7 @@ export default function Education() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span className="text-sm font-medium text-primary-700 dark:text-industrial-accent">
-                  Télécharger l'attestation de participation
+                  {t('education.bal.download')}
                 </span>
               </motion.a>
             </div>

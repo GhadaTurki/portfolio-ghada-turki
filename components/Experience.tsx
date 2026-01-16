@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Calendar, MapPin, Code, Cpu, Smartphone, Settings } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 interface Experience {
   company: string
@@ -13,60 +14,56 @@ interface Experience {
   icon: React.ElementType
 }
 
-const experiences: Experience[] = [
-  {
-    company: 'MATECH',
-    position: 'Mémoire de fin d\'études',
-    location: 'Megrine, Tunisie',
-    period: '03/2025 - 09/2025',
-    description:
-      'Conception et réalisation d\'un émulateur de groupe électrogène et développement de son application mobile en réalité augmentée',
-    technologies: ['Unity', 'C#', 'Vuforia', 'Arduino', 'SolidWorks', 'Blender'],
-    icon: Smartphone,
-  },
-  {
-    company: 'GD Tunisie',
-    position: 'Stage d\'ingénieur',
-    location: 'Birbouragba, Tunisie',
-    period: '07/2025 - 08/2025',
-    description:
-      'Développement d\'une solution innovante de supervision de la production avec application desktop Python et système de comptage automatisé',
-    technologies: ['Python', 'Arduino', 'SolidWorks', 'Capteurs'],
-    icon: Settings,
-  },
-  {
-    company: 'MATECH',
-    position: 'Stage de fin d\'études',
-    location: 'Megrine, Tunisie',
-    period: '02/2023 - 06/2023',
-    description:
-      'Conception et réalisation d\'un simulateur de pannes d\'un groupe électrogène avec application mobile Java',
-    technologies: ['Java', 'Électronique industrielle', 'Contrôleurs'],
-    icon: Cpu,
-  },
-  {
-    company: 'CSM-GIAS',
-    position: 'Stage de technicien',
-    location: 'Bouargoub, Tunisie',
-    period: '01/2022 - 02/2022',
-    description:
-      'Amélioration de la machine Trepko Seau - Conception d\'une machine pour la mise en place des récipients sur le tapis',
-    technologies: ['SolidWorks', 'Arduino'],
-    icon: Code,
-  },
-  {
-    company: 'WEWIRE',
-    position: 'Stage d\'initiation',
-    location: 'Hammamet, Tunisie',
-    period: '07/2021 - 07/2021',
-    description:
-      'Découverte des activités de l\'entreprise, apprentissage de la fabrication des câbles et application des principes du Lean',
-    technologies: ['Lean Manufacturing'],
-    icon: Settings,
-  },
-]
-
 export default function Experience() {
+  const { t } = useLanguage()
+  
+  const experiences: Experience[] = [
+    {
+      company: 'MATECH',
+      position: t('experience.matech2025.position'),
+      location: 'Megrine, Tunisia',
+      period: '03/2025 - 09/2025',
+      description: t('experience.matech2025.description'),
+      technologies: ['Unity', 'C#', 'Vuforia', 'Arduino', 'SolidWorks', 'Blender'],
+      icon: Smartphone,
+    },
+    {
+      company: 'GD Tunisie',
+      position: t('experience.gd2025.position'),
+      location: 'Birbouragba, Tunisia',
+      period: '07/2025 - 08/2025',
+      description: t('experience.gd2025.description'),
+      technologies: ['Python', 'Arduino', 'SolidWorks', 'Capteurs'],
+      icon: Settings,
+    },
+    {
+      company: 'MATECH',
+      position: t('experience.matech2023.position'),
+      location: 'Megrine, Tunisia',
+      period: '02/2023 - 06/2023',
+      description: t('experience.matech2023.description'),
+      technologies: ['Java', 'Industrial electronics', 'Controllers'],
+      icon: Cpu,
+    },
+    {
+      company: 'CSM-GIAS',
+      position: t('experience.csm2022.position'),
+      location: 'Bouargoub, Tunisia',
+      period: '01/2022 - 02/2022',
+      description: t('experience.csm2022.description'),
+      technologies: ['SolidWorks', 'Arduino'],
+      icon: Code,
+    },
+    {
+      company: 'WEWIRE',
+      position: t('experience.wewire2021.position'),
+      location: 'Hammamet, Tunisia',
+      period: '07/2021 - 07/2021',
+      description: t('experience.wewire2021.description'),
+      technologies: ['Lean Manufacturing'],
+      icon: Settings,
+    },
+  ]
   return (
     <section id="experience" className="section-padding relative">
       <div className="container-custom">
@@ -77,7 +74,7 @@ export default function Experience() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">Expérience</span>
+            <span className="text-gradient">{t('experience.title')}</span>
           </h2>
           <div className="w-24 h-1 bg-primary-600 dark:bg-industrial-accent mx-auto mb-8" />
         </motion.div>

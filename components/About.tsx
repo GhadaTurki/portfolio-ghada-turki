@@ -1,9 +1,43 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Cpu, Zap, Target, Users } from 'lucide-react'
+import { Cpu, Zap, Target, Users, GraduationCap, Award, Calendar } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 export default function About() {
+  const { t } = useLanguage()
+  
+  const domains = [
+    {
+      icon: Cpu,
+      title: t('about.industrialAutomation'),
+      description: t('about.industrialAutomationDesc'),
+    },
+    {
+      icon: Zap,
+      title: t('about.robotics'),
+      description: t('about.roboticsDesc'),
+    },
+    {
+      icon: Target,
+      title: t('about.iot'),
+      description: t('about.iotDesc'),
+    },
+    {
+      icon: Users,
+      title: t('about.ar'),
+      description: t('about.arDesc'),
+    },
+  ]
+
+  const softSkills = [
+    t('about.innovation'),
+    t('about.teamwork'),
+    t('about.autonomy'),
+    t('about.analytical'),
+    t('about.problemSolving'),
+    t('about.leadership'),
+  ]
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -23,37 +57,6 @@ export default function About() {
     },
   }
 
-  const domains = [
-    {
-      icon: Cpu,
-      title: 'Automatisation industrielle',
-      description: 'Conception et développement de systèmes automatisés pour l\'industrie 4.0',
-    },
-    {
-      icon: Zap,
-      title: 'Robotique',
-      description: 'Développement de robots autonomes et systèmes robotiques intelligents',
-    },
-    {
-      icon: Target,
-      title: 'IoT & Systèmes embarqués',
-      description: 'Intégration de capteurs, microcontrôleurs et protocoles de communication',
-    },
-    {
-      icon: Users,
-      title: 'Réalité augmentée',
-      description: 'Applications AR pour la formation et la maintenance industrielle',
-    },
-  ]
-
-  const softSkills = [
-    'Innovation',
-    'Travail d\'équipe',
-    'Autonomie',
-    'Esprit analytique',
-    'Résolution de problèmes',
-    'Leadership',
-  ]
 
   return (
     <section id="about" className="section-padding bg-gray-50 dark:bg-industrial-dark">
@@ -66,12 +69,12 @@ export default function About() {
         >
           <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-gradient">À propos</span>
+              <span className="text-gradient">{t('about.title')}</span>
             </h2>
             <div className="w-24 h-1 bg-primary-600 dark:bg-industrial-accent mx-auto mb-8" />
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
             <motion.div variants={itemVariants} className="order-2 lg:order-1">
               <div className="flex flex-col items-center lg:items-start mb-8 lg:mb-0">
                 <motion.div
@@ -94,28 +97,22 @@ export default function About() {
 
             <motion.div variants={itemVariants} className="order-1 lg:order-2">
               <h3 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-                Profil professionnel
+                {t('about.professionalProfile')}
               </h3>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-                Titulaire d'un <strong>Master professionnel en Mécatronique</strong> et{' '}
-                <strong>ingénieure en Génie Électromécanique</strong>, avec une expertise en
-                conception mécanique, automatisation et développement logiciel. Passionnée par
-                l'innovation et les systèmes automatisés, je cherche à appliquer mes compétences
-                dans un environnement dynamique à travers un stage de fin d'études.
+                {t('about.description')}
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                Mon objectif est de contribuer à la transformation digitale de l'industrie en
-                développant des solutions intelligentes qui combinent mécanique, électronique et
-                intelligence artificielle.
+                {t('about.objective')}
               </p>
             </motion.div>
 
             <motion.div
               variants={itemVariants}
-              className="glass-effect rounded-2xl p-8 card-hover"
+              className="glass-effect rounded-2xl p-8 card-hover lg:col-span-2"
             >
               <h4 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-                Domaines clés
+                {t('about.keyDomains')}
               </h4>
               <div className="space-y-4">
                 {domains.map((domain, index) => (
@@ -139,9 +136,77 @@ export default function About() {
             </motion.div>
           </div>
 
+          {/* Education Section - Full Width */}
+          <motion.div variants={itemVariants} className="w-full">
+            <div className="mt-8 pt-8 border-t border-gray-200 dark:border-industrial-light">
+              <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+                {t('education.title')}
+              </h3>
+              <div className="space-y-6">
+                {[
+                  {
+                    degree: t('education.esprit.degree'),
+                    institution: t('education.esprit.institution'),
+                    period: t('education.esprit.period'),
+                    status: t('education.esprit.status'),
+                    description: t('education.esprit.description'),
+                  },
+                  {
+                    degree: t('education.istic.degree'),
+                    institution: t('education.istic.institution'),
+                    period: t('education.istic.period'),
+                    status: t('education.istic.status'),
+                    description: t('education.istic.description'),
+                  },
+                  {
+                    degree: t('education.isetn.degree'),
+                    institution: t('education.isetn.institution'),
+                    period: t('education.isetn.period'),
+                    status: t('education.isetn.status'),
+                    description: t('education.isetn.description'),
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="p-4 rounded-lg bg-white/50 dark:bg-industrial-light/30 border border-gray-200 dark:border-industrial-light"
+                  >
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                        {item.degree}
+                      </h4>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          item.status === t('education.esprit.status')
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                            : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                        }`}
+                      >
+                        {item.status}
+                      </span>
+                    </div>
+                    <p className="text-base font-semibold text-primary-600 dark:text-industrial-accent mb-2">
+                      {item.institution}
+                    </p>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      <Calendar className="w-4 h-4" />
+                      <span>{item.period}</span>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
           <motion.div variants={itemVariants} className="mt-12">
             <h4 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
-              Soft Skills
+              {t('about.softSkills')}
             </h4>
             <div className="flex flex-wrap justify-center gap-3">
               {softSkills.map((skill, index) => (

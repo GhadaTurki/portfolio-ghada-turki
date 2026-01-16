@@ -3,8 +3,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, Linkedin, Send, CheckCircle } from 'lucide-react'
+import { useLanguage } from './LanguageProvider'
 
 export default function Contact() {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -43,11 +45,11 @@ export default function Contact() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">Contact</span>
+            <span className="text-gradient">{t('contact.title')}</span>
           </h2>
           <div className="w-24 h-1 bg-primary-600 dark:bg-industrial-accent mx-auto mb-8" />
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Intéressé par mon profil ? N'hésitez pas à me contacter pour discuter de vos projets
+            {t('contact.subtitle')}
           </p>
         </motion.div>
 
@@ -61,11 +63,10 @@ export default function Contact() {
           >
             <div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                Informations de contact
+                {t('contact.info')}
               </h3>
               <p className="text-gray-700 dark:text-gray-300 mb-8">
-                Je suis disponible pour discuter de projets, stages ou opportunités de collaboration
-                dans le domaine de l'ingénierie et de l'innovation technologique.
+                {t('contact.infoDesc')}
               </p>
             </div>
 
@@ -78,7 +79,7 @@ export default function Contact() {
                   <Mail className="w-5 h-5 text-primary-600 dark:text-industrial-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('contact.email')}</p>
                   <p className="font-medium text-gray-900 dark:text-white">
                     ghada.turkiditgaraali@esprit.tn
                   </p>
@@ -90,7 +91,7 @@ export default function Contact() {
                   <Phone className="w-5 h-5 text-primary-600 dark:text-industrial-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Téléphone</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('contact.phone')}</p>
                   <p className="font-medium text-gray-900 dark:text-white">216-26-016-352</p>
                 </div>
               </div>
@@ -100,15 +101,15 @@ export default function Contact() {
                   <MapPin className="w-5 h-5 text-primary-600 dark:text-industrial-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Localisation</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('contact.location')}</p>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Hammamet, Nabeul, Tunisie
+                    Hammamet, Nabeul, Tunisia
                   </p>
                 </div>
               </div>
 
               <div className="pt-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Réseaux sociaux</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{t('contact.social')}</p>
                 <div className="flex gap-3">
                   <a
                     href="https://www.linkedin.com/in/ghada-turki-20319b217"
@@ -139,7 +140,7 @@ export default function Contact() {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Nom complet
+                  {t('contact.fullName')}
                 </label>
                 <input
                   type="text"
@@ -149,7 +150,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-industrial-dark border border-gray-300 dark:border-industrial-light focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-industrial-accent text-gray-900 dark:text-white"
-                  placeholder="Votre nom"
+                  placeholder={t('contact.namePlaceholder')}
                 />
               </div>
 
@@ -158,7 +159,7 @@ export default function Contact() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Email
+                  {t('contact.email')}
                 </label>
                 <input
                   type="email"
@@ -168,7 +169,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-industrial-dark border border-gray-300 dark:border-industrial-light focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-industrial-accent text-gray-900 dark:text-white"
-                  placeholder="votre.email@example.com"
+                  placeholder={t('contact.emailPlaceholder')}
                 />
               </div>
 
@@ -177,7 +178,7 @@ export default function Contact() {
                   htmlFor="subject"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Sujet
+                  {t('contact.subject')}
                 </label>
                 <input
                   type="text"
@@ -187,7 +188,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-industrial-dark border border-gray-300 dark:border-industrial-light focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-industrial-accent text-gray-900 dark:text-white"
-                  placeholder="Sujet de votre message"
+                  placeholder={t('contact.subjectPlaceholder')}
                 />
               </div>
 
@@ -196,7 +197,7 @@ export default function Contact() {
                   htmlFor="message"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Message
+                  {t('contact.message')}
                 </label>
                 <textarea
                   id="message"
@@ -206,7 +207,7 @@ export default function Contact() {
                   required
                   rows={6}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-industrial-dark border border-gray-300 dark:border-industrial-light focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-industrial-accent text-gray-900 dark:text-white resize-none"
-                  placeholder="Votre message..."
+                  placeholder={t('contact.messagePlaceholder')}
                 />
               </div>
 
@@ -218,12 +219,12 @@ export default function Contact() {
                 {isSubmitted ? (
                   <>
                     <CheckCircle className="w-5 h-5" />
-                    Message envoyé !
+                    {t('contact.sent')}
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
-                    Envoyer le message
+                    {t('contact.send')}
                   </>
                 )}
               </button>
